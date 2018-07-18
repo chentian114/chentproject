@@ -106,7 +106,8 @@ public class ExcelService {
             gweightCell.setCellValue(orderProd.getGweight());
 
             HSSFCell specCell = prodRow.getCell(Consts.SPEC_CELL_NUM_2003);
-            specCell.setCellValue(orderProd.getSpec());
+            String finalSpec = converSpecBySpecTypeAndSpec(orderProd.getSpecType(), orderProd.getSpec());
+            specCell.setCellValue(finalSpec);
 
             HSSFCell amountCell = prodRow.getCell(Consts.AMOUNT_CELL_NUM_2003);
             amountCell.setCellValue(orderProd.getAmount());
@@ -151,6 +152,25 @@ public class ExcelService {
         HSSFCell deliverCell = deliverRow.getCell(OrderInfoEnum.DELIVER_TYPE_2003.getCellNum());
         deliverCell.setCellValue("送货员："+orderEntity.getDeliverType());
         return hwb;
+    }
+
+    private String converSpecBySpecTypeAndSpec(String specType, String spec) {
+        //规格进十位显示
+        int scalBit = 10;
+        String reg = "\\*";
+        if(Consts.SPEC_TYPE_AREA.equals(specType)){
+            String [] arrs = spec.split(reg);
+            Float lenspec = Float.valueOf(arrs[0]);
+            Float widspec = Float.valueOf(arrs[1]);
+            lenspec = lenspec * scalBit;
+            widspec = widspec * scalBit;
+            return lenspec.intValue()+"*"+widspec.intValue();
+        }else if(Consts.SPEC_TYPE_WIDE.equals(specType)){
+            Float fspec = Float.valueOf(spec) * scalBit;
+            return String.valueOf(fspec.intValue());
+        }else {
+            return spec;
+        }
     }
 
     private void fillOrderInfoToExcel(XSSFWorkbook xwb,TOrderEntity orderEntity) {
@@ -255,8 +275,7 @@ public class ExcelService {
      * @return
      */
     public String getExcelTemplateFileSuffix(){
-        String suffix = excelTemplateFile.substring(excelTemplateFile.lastIndexOf("."));
-        return suffix;
+        return excelTemplateFile.substring(excelTemplateFile.lastIndexOf("."));
     }
 
 }

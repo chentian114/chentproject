@@ -65,7 +65,7 @@ function loadDefaultCustomer(customerId){
 function setDefaultCustomer(customer){
     var salesIdHtml = $("#customerId");
     salesIdHtml.append("<option value=" + customer.id + ">" + customer.custName + "</option>");
-    $("#customerId").val(customerId);
+    $("#customerId").val(customer.id);
     $("#phone").val(customer.phone);
     if(!common.isNull(customer.deliveryAddress)){
         $("#address").val(customer.deliveryAddress);

@@ -61,4 +61,11 @@ public class Consts {
     public static final int PRICE_CELL_NUM_2003 = 10;
     /** 备注列号*/
     public static final int MEMO_CELL_NUM_2003 = 11;
+
+    /** 规格类型常量*/
+    public static final String SPEC_TYPE_AREA="长*宽";
+    /** 规格类型常量*/
+    public static final String SPEC_TYPE_WIDE="宽幅";
+
+
 }
