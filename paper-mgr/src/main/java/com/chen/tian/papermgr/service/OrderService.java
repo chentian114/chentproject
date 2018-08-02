@@ -244,6 +244,42 @@ public class OrderService {
         return order;
     }
 
+    /**
+     * 校验数据是否正常有无被改动如金额，总价
+     * var money = 0;
+     if(specType == SPEC_TYPE_AREA){ //长*宽
+     gweight = common.formatFloatDigit(gweight,MONEY_DIGIT_2);
+     gweight = gweight/1000;
+     var specArrays = spec.split("*");
+     var specNum1 = specArrays[0];
+     var specNum2 = specArrays[1];
+     var specCount = specNum1 * specNum2 ;
+     specCount = specCount/10000;
+     unitPrice = unitPrice/1000;
+     money = gweight * specCount * amount * unitPrice;
+     }else if(specType == SPEC_TYPE_WIDE){//宽幅
+     amount = amount/1000;
+     money = amount * unitPrice;
+     }
+     money = common.formatFloatDigit(money,MONEY_DIGIT_2);
+     * @param orderEntity
+     * @return
+     */
+    public boolean checkOrderPrice(TOrderEntity orderEntity) {
+        int moneyCount = 0;
+        for(TOrderProdEntity prod : orderEntity.getOrderProductList()){
+            Float money = 0.0f ;
+            if(Consts.SPEC_TYPE_AREA.equals(prod.getSpecType())){
+
+            }else if(Consts.SPEC_TYPE_WIDE.equals(prod.getSpecType())){
+
+            }
+
+        }
+
+        return true;
+    }
+
     @Transactional
     public TOrderEntity saveOrder(TOrderEntity orderEntity) throws Exception {
         String orderNumber = buildUniqeOrderNumber();

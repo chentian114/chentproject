@@ -83,6 +83,13 @@ public class OrderController extends BaseController {
         ReturnDto<TOrderEntity> returnDto = new ReturnDto<>(true);
         try {
             TOrderEntity orderEntity = orderService.converOrderByOrderDto(orderDto);
+            boolean chResult = orderService.checkOrderPrice(orderEntity);
+            if(!chResult){
+                logger.error("checkOrderPrice error 校验工单数据异常 order:{}", JSON.toJSONString(orderDto));
+                returnDto.setStatus(false);
+                returnDto.setDescription("校验工单数据异常，请重新录单！");
+                return JSON.toJSONString(returnDto);
+            }
             orderEntity = orderService.saveOrder(orderEntity);
             excelService.buildExcelByOrder(orderEntity);
             returnDto.setData(orderEntity);
@@ -94,6 +101,7 @@ public class OrderController extends BaseController {
 
         return JSON.toJSONString(returnDto);
     }
+
 
     @RequestMapping(value="/downloadOrder.do")
     public HttpServletResponse downloadOrder(HttpServletResponse response,@RequestParam(value="id", required = true) Long orderId ){
