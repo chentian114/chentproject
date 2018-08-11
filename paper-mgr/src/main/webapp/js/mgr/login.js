@@ -2,6 +2,7 @@ $(function(){
 	$("input").keyup(function(e){
 		down( e );
 	});
+	setLastLoginAccount();
 	$('input[id=account]').focus();
 });
 function down( e ){
@@ -14,7 +15,6 @@ function down( e ){
 function login(){
 	var password=$("#password").val();
 	var account=$("#account").val();
-
 	var checkFlag = validParameterCheck(account,password);
 	if(!checkFlag){
 		return;
@@ -46,7 +46,7 @@ function login(){
 	api_request('../../paper-mgr' + OAUTH_LOGIN, params, cb, null, true, null);
 }
 
-function validParameterCheck() {
+function validParameterCheck(account,password) {
 	if (account == "") {
 		$("#errorOne").attr("class", "ui negative small message");
 		$(".two").show();

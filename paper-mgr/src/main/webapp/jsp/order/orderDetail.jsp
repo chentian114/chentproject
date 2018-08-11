@@ -127,6 +127,7 @@
                                     <th class="one wide">单价（元/吨）</th>
                                     <th class="one wide">金额（元）</th>
                                     <th class="two wide">备注</th>
+                                    <th class="two wide">重量备注</th>
                                 </tr>
                                 </thead>
                                 <tbody id="productList">

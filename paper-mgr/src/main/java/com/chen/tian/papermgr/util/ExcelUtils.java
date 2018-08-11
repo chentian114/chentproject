@@ -1,5 +1,6 @@
 package com.chen.tian.papermgr.util;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
@@ -272,6 +273,26 @@ public class ExcelUtils {
         toStyle.setFont(toFont);
     }
 
+    public static void removeMergedRegion(HSSFSheet sheet,int row ,int column)
+    {
+        int sheetMergeCount = sheet.getNumMergedRegions();//获取所有的单元格
+        int index = 0;//用于保存要移除的那个单元格序号
+        for (int i = 0; i < sheetMergeCount; i++) {
+            CellRangeAddress ca = sheet.getMergedRegion(i); //获取第i个单元格
+            int firstColumn = ca.getFirstColumn();
+            int lastColumn = ca.getLastColumn();
+            int firstRow = ca.getFirstRow();
+            int lastRow = ca.getLastRow();
+            if(row >= firstRow && row <= lastRow)
+            {
+                if(column >= firstColumn && column <= lastColumn)
+                {
+                    index = i;
+                }
+            }
+        }
+        sheet.removeMergedRegion(index);//移除合并单元格
+    }
 
 
 

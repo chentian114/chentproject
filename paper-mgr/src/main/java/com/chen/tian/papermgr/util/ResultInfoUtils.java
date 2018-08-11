@@ -34,7 +34,7 @@ public class ResultInfoUtils {
 
 	public static ResultInfo error(String message){
 		ResultInfo info = new ResultInfo();
-		info.setResultDetail(RESULT_FAIL);
+		info.setResultCode(RESULT_CODE_FAIL);
 		info.setResultDetail(message);
 		return info;
 	}

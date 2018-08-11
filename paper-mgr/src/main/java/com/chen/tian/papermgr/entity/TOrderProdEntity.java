@@ -41,6 +41,8 @@ public class TOrderProdEntity implements Serializable {
     private String unitPrice;    //单价（元/吨）
     @Column(name = "memo")
     private String memo;        //备注
+    @Column(name = "weight_memo")
+    private String weightmemo;        //重量备注
     @Column(name = "price")
     private Double money;
     @Column(name = "state")

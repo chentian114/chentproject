@@ -127,8 +127,8 @@ var SPEC_TYPE_AREA="长*宽";     //规格类型常量
 var SPEC_TYPE_WIDE="宽幅";      //规格类型常量
 var UNIT_ACOUNT="张";           //单位类型常量
 var UNIT_KG="KG";              //单位类型常量
-var MONEY_DIGIT_0=0;             //总金额精确到元
 var MONEY_DIGIT_2=2;             //金额精确到分
+var PROD_MAX_COUNT = 15;        //添加产品数量最多为15个
 
 function fillProdAttr(prodAttr){
     var valuesList = prodAttr.valuesList;
@@ -245,9 +245,9 @@ function checkProdCount(){
         errli.append("<li class='14'>暂未添加货单记录；</li>");
     }
 
-    if(productCount>6 ){
+    if(productCount>PROD_MAX_COUNT ){
         flag = false;
-        errli.append("<li class='15'>最多添加6个货单记录；</li>");
+        errli.append("<li class='15'>最多添加"+PROD_MAX_COUNT+"个货单记录；</li>");
     }
     if(!flag){
         errorInfo.show();
@@ -430,8 +430,8 @@ var moneyCount = parseFloat(0.00) ;  //合计金额总数
 var prodParamList = [];         //添加产品列表
 var DELIVER_TYPE_SELF = 4;      //送货方式自定义常量
 function addProduct(){
-    if(productCount == 6){
-        alert("一个货单最多添加6个产品!");
+    if(productCount == PROD_MAX_COUNT){
+        alert("一个货单最多添加"+PROD_MAX_COUNT+"个产品!");
         return;
     }
     var addProductDiv = $('#addProductDiv');
@@ -440,15 +440,18 @@ function addProduct(){
 
 function resetProductAdd(){
     $("#productId option:first").prop("selected","selected");
-    $("#gweight option:first").prop("selected","selected");
-    $("#specType option:first").prop("selected","selected");
-    $("#spec option:first").prop("selected","selected");
     selectProdName($("#productId").val());
-    selectgweight($("#gweight").val());
-    selectSpecType($("#specType").val());
+   //克重和规格不重置
+   // $("#gweight option:first").prop("selected","selected");
+   // $("#specType option:first").prop("selected","selected");
+   // $("#spec option:first").prop("selected","selected");
+   // selectgweight($("#gweight").val());
+   // selectSpecType($("#specType").val());
+    $("#moneyName").text("");
     $("#amount").val("");
     $("#unitPrice").val("");
     $("#memo").val("");
+    $("#weightmemo").val("");
 }
 
 function productSave(){
@@ -472,6 +475,7 @@ function productSave(){
     var unitPrice = $("#unitPrice").val();
     var money = $("#money").val();
     var memo = $("#memo").val();
+    var weightmemo = $("#weightmemo").val();
 
     var finalprodName = prodName;
     if(productId == PRODUCT_ID_SELFDEFINE){
@@ -486,21 +490,8 @@ function productSave(){
         finalspec = specSelf;
     }
 
-    var productListHtml = $("#productList");
-    productListHtml.append("<tr>");
-    productListHtml.append("<td class='two wide'>"+finalprodName+"</td>");
-    productListHtml.append("<td class='one wide'>"+finalgweight+"</td>");
-    productListHtml.append("<td class='two wide'>"+finalspec+"</td>");
-    productListHtml.append("<td class='one wide'>"+amount+"</td>");
-    productListHtml.append("<td class='one wide'>"+unit+"</td>");
-    productListHtml.append("<td class='one wide'>"+unitPrice+"</td>");
-    productListHtml.append("<td class='one wide'>"+money+"</td>");
-    productListHtml.append("<td class='two wide'>"+memo+"</td>");
-    productListHtml.append("</tr>");
-    productCancel();
-    countOrderMoney(money);
-
     var prodParam = {
+        'productCount':productCount,
         'productId': productId,
         'prodName':finalprodName,
         'gweight':finalgweight,
@@ -510,11 +501,96 @@ function productSave(){
         'unit':unit,
         'unitPrice':unitPrice,
         'money':money,
-        'memo':memo
+        'memo':memo,
+        'weightmemo':weightmemo
     };
+
+    var productListHtml = $("#productList");
+    productListHtml.append('<tr>');
+    productListHtml.append('<input type="hidden" id=productPara'+productCount+' value='+parseParam(prodParam)+' />');
+    productListHtml.append("<td class='one wide' onclick=updateProd("+productCount+","+spec+","+gweight+") name=prod"+productCount+"><a href='#'>修改</a></td>");
+    productListHtml.append("<td class='two wide' name=prod"+productCount+">"+finalprodName+"</td>");
+    productListHtml.append("<td class='one wide' name=prod"+productCount+">"+finalgweight+"</td>");
+    productListHtml.append("<td class='two wide' name=prod"+productCount+">"+finalspec+"</td>");
+    productListHtml.append("<td class='one wide' name=prod"+productCount+">"+amount+"</td>");
+    productListHtml.append("<td class='one wide' name=prod"+productCount+">"+unit+"</td>");
+    productListHtml.append("<td class='one wide' name=prod"+productCount+">"+unitPrice+"</td>");
+    productListHtml.append("<td class='one wide' name=prod"+productCount+">"+money+"</td>");
+    productListHtml.append("<td class='two wide' style='word-break:break-all;' name=prod"+productCount+">"+memo+"</td>");
+    productListHtml.append("<td class='two wide' style='word-break:break-all;' name=prod"+productCount+">"+weightmemo+"</td>");
+    productListHtml.append('</tr>');
+    productCancel();
+    countOrderMoney(money);
 
     addProductParamList(prodParam);
 
+}
+
+var parseParam=function(paramObj, key){
+    var paramStr="";
+    if(paramObj instanceof String||paramObj instanceof Number||paramObj instanceof Boolean){
+        paramStr+="&"+key+"="+encodeURIComponent(paramObj);
+    }else{
+        $.each(paramObj,function(i){
+                   var k=key==null?i:key+(paramObj instanceof Array?"["+i+"]":"."+i);
+                   paramStr+='&'+parseParam(this, k);
+        });
+    }
+    return paramStr.substr(1);
+};
+function getUrlParamValue(requestParas,name) {
+     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+     var r = requestParas.match(reg);
+     if (r != null) return decodeURIComponent(r[2]);
+     return null;
+ }
+
+
+//修改产品
+function updateProd(prodNum,spec,gweight){
+    var productPara = $("#productPara"+prodNum).val();
+
+    var productId = getUrlParamValue(productPara,"productId");
+    var finalgweight = getUrlParamValue(productPara,"gweight");
+    var specType = getUrlParamValue(productPara,"specType");
+    var finalspec = getUrlParamValue(productPara,"spec");
+    var amount = getUrlParamValue(productPara,"amount");
+    var unitPrice = getUrlParamValue(productPara, "unitPrice");
+    var money = getUrlParamValue(productPara,"money");
+    var memo = getUrlParamValue(productPara,"memo");
+    var weightmemo = getUrlParamValue(productPara,"weightmemo");
+
+    //自定义参数处理
+    if(gweight == PRODUCT_ATTR_SELFDEFINE){
+        finalgweight = gweight;
+        $("#gweightSelfDiv").attr("class","show");
+    }
+    if(spec == PRODUCT_ATTR_SELFDEFINE){
+        finalspec = spec;
+        $("#specSelfDiv").attr("class","show");
+    }
+    if(productId == PRODUCT_ID_SELFDEFINE){
+        $("#prodNameSelfDiv").attr("class","show");
+    }
+
+    $("#productId").val(productId);
+    $("#gweight").val(finalgweight);
+    $("#specType").val(specType);
+    $("#spec").val(finalspec);
+    $("#amount").val(amount);
+    $("#unitPrice").val(unitPrice);
+    $("#money").val(money);
+    $("#memo").val(memo);
+    $("#weightmemo").val(weightmemo);
+    var addProductDiv = $('#addProductDiv');
+    addProductDiv.attr("class","ui basic segment show");
+
+    //总价减于产品价格
+    countSubOrderMoney(money);
+    //删除产品显示
+    $("td[name=prod"+prodNum+"]").remove();
+    //删除已添加的产品列表中对象
+    delProductParamListByProductCount(prodNum);
 }
 function productCancel(){
     var addProductDiv = $('#addProductDiv');
@@ -524,17 +600,55 @@ function productCancel(){
 
 function countOrderMoney(money) {
     moneyCount = common.formatFloatDigit(moneyCount, MONEY_DIGIT_2) + common.formatFloatDigit(money, MONEY_DIGIT_2);
-    var moneyCountInt = common.formatFloatDigit(moneyCount,MONEY_DIGIT_0);
+    var moneyCountInt = Math.round(moneyCount); //总金额四舍五入整数
+    if(isNaN(moneyCountInt)){
+        moneyCountInt = 0
+    }
     var moneyUpper = common.convertCurrency(moneyCountInt);
     $("#moneyCount").val(moneyCountInt);
     $("#moneyCountName").text(moneyCountInt);
     $("#moneyCountUpper").val(moneyUpper);
     $("#moneyCountUpperName").text(moneyUpper);
 }
+
+function countSubOrderMoney(money) {
+    moneyCount = common.formatFloatDigit(moneyCount, MONEY_DIGIT_2) - common.formatFloatDigit(money, MONEY_DIGIT_2);
+    var moneyCountInt = Math.round(moneyCount); //总金额四舍五入整数
+    if(isNaN(moneyCountInt)){
+        moneyCountInt = 0
+    }
+    var moneyUpper = common.convertCurrency(moneyCountInt);
+    $("#moneyCount").val(moneyCountInt);
+    $("#moneyCountName").text(moneyCountInt);
+    $("#moneyCountUpper").val(moneyUpper);
+    $("#moneyCountUpperName").text(moneyUpper);
+}
+
 function addProductParamList(prodParam){
     productCount++;
     prodParamList.push(prodParam);
 }
+
+//根据添加产品序号删除已添加的产品列表中对象
+function delProductParamListByProductCount(productCount){
+    var delIndex = -1;
+    for(var index in prodParamList){
+        var prod = prodParamList[index] ;
+        for(var paramName in prod){
+            if(paramName == "productCount" && prod[paramName] == productCount ){
+                delIndex = index ;
+                break;
+            }
+        }
+        if(delIndex != -1){
+            break;
+        }
+    }
+    if(delIndex!=-1){
+        prodParamList.splice(delIndex,1);
+    }
+}
+
 
 function orderAdd(){
     var chkResult = checkProdAddParams();

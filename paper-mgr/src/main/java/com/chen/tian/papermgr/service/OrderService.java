@@ -266,7 +266,10 @@ public class OrderService {
      * @return
      */
     public boolean checkOrderPrice(TOrderEntity orderEntity) {
-        int moneyCount = 0;
+        if(Utils.isEmpty(orderEntity.getOrderProductList())){
+            return false;
+        }
+            int moneyCount = 0;
         for(TOrderProdEntity prod : orderEntity.getOrderProductList()){
             Float money = 0.0f ;
             if(Consts.SPEC_TYPE_AREA.equals(prod.getSpecType())){

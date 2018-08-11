@@ -212,8 +212,11 @@
                                 <div class="two wide field">
                                     <label>备注:</label>
                                 </div>
-                                <div class="seven wide field">
+                                <div class="three wide field">
                                     <input name="memo" id="memo" type="text" value="" placeholder="">
+                                </div>
+                                <div class="seven wide field">
+                                    <input name="weightmemo" id="weightmemo" type="text" value="" placeholder="请输入重量备注">
                                 </div>
                             </div>
                             <div class=" left fields" >
@@ -233,6 +236,7 @@
                                 <!--表头-->
                                 <thead>
                                 <tr>
+                                    <th class="one wide">操作</th>
                                     <th class="two wide">品名</th>
                                     <th class="one wide">克重（克）</th>
                                     <th class="two wide">规格（厘米）</th>
@@ -241,6 +245,7 @@
                                     <th class="one wide">单价（元/吨）</th>
                                     <th class="one wide">金额（元）</th>
                                     <th class="two wide">备注</th>
+                                    <th class="two wide">重量备注</th>
                                 </tr>
                                 </thead>
                                 <tbody id="productList">

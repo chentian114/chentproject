@@ -45,12 +45,12 @@
             </div>
             <div class="field">
                 <div class="ui fluid left input">
-                    <input type="text" placeholder="用户账号" id="account">
+                    <input type="text" placeholder="用户账号" id="account" />
                 </div>
             </div>
             <div class="field">
                 <div class="ui fluid left input">
-                    <input type="password" placeholder="密码" id="password">
+                    <input type="password" placeholder="密码" id="password" />
                 </div>
             </div>
             <div class="field">

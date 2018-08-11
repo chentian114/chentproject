@@ -41,7 +41,7 @@ public class AdminController extends BaseController{
         ReturnDto returnDto = new ReturnDto(true);
         try {
             ResultInfo resultInfo = adminService.login(account,password);
-
+            logger.info("resultInfo:{}",JSON.toJSONString(resultInfo));
             if (ResultInfoUtils.isSucess(resultInfo)) {
                 logger.info("account:{} login sucess!", account);
                 returnDto.setData(resultInfo.getResultData());

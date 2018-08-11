@@ -40,7 +40,8 @@ function loadDetails(id){
                 productListHtml.append("<td class='one wide'>"+prod.unit+"</td>");
                 productListHtml.append("<td class='one wide'>"+prod.unitPrice+"</td>");
                 productListHtml.append("<td class='one wide'>"+prod.money+"</td>");
-                productListHtml.append("<td class='two wide'>"+prod.memo+"</td>");
+                productListHtml.append("<td class='two wide' style='word-break:break-all;'>"+prod.memo+"</td>");
+                productListHtml.append("<td class='two wide' style='word-break:break-all;'>"+prod.weightmemo+"</td>");
                 productListHtml.append("</tr>");
             }
 
