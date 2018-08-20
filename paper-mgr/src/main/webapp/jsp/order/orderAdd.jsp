@@ -166,7 +166,7 @@
                                     </select>
                                 </div>
                                 <div class="two wide field">
-                                    <label>规格(cm):</label>
+                                    <label>规格(mm):</label>
                                 </div>
                                 <div class="three wide field">
                                     <select id="spec" onblur="countMoney()" onchange="selectSpec(this.options[this.options.selectedIndex].value)" style="border: 1px solid #d6d8dd;width: 110px;height: 34px;border-radius: 4px;">
@@ -228,7 +228,18 @@
                             </div>
                         </div>
 
-
+                        <div class="required fields">
+                            <div class="two wide field"></div>
+                            <div class="ten wide field">
+                                <!--错误提示 start-->
+                                <div class="ui negative small message d-n" id="errorInfo">
+                                    <div class="header">提示，请修改后重试！</div>
+                                    <ul class="list"  id="errInfoList">
+                                    </ul>
+                                </div>
+                                <!--错误提示 end-->
+                            </div>
+                        </div>
 
                         <div class="ui basic segment">
                             <!--列表 start-->
@@ -307,20 +318,18 @@
                             </div>
                         </div>
 
-
                         <div class="required fields">
                             <div class="two wide field"></div>
                             <div class="ten wide field">
                                 <!--错误提示 start-->
-                                <div class="ui negative small message d-n" id="errorInfo">
+                                <div class="ui negative small message d-n" id="errorInfo2">
                                     <div class="header">提示，请修改后重试！</div>
-                                    <ul class="list"  id="errInfoList">
+                                    <ul class="list"  id="errInfoList2">
                                     </ul>
                                 </div>
                                 <!--错误提示 end-->
                             </div>
                         </div>
-
                     </div>
 
 

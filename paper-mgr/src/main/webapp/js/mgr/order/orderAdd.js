@@ -164,6 +164,7 @@ function selectProdName(productId){
     }else{
         $("#prodNameSelfDiv").attr("class","hidden");
     }
+    $("#unitPrice").val(""); //产品修改，单价重置
 }
 function selectgweight(gweight){
     if(gweight == PRODUCT_ATTR_SELFDEFINE){
@@ -234,18 +235,18 @@ function selectSpec(specValue){
 }
 
 function checkProdCount(){
-    var errorInfo = $("#errorInfo");
+    var errorInfo = $("#errorInfo2");
     errorInfo.hide();
-    var errli = $("#errInfoList");
+    var errli = $("#errInfoList2");
     errli.empty();
     var flag =true;
 
-    if(productCount<1 ){
+    if(getRealProductCount()<1 ){
         flag = false;
         errli.append("<li class='14'>暂未添加货单记录；</li>");
     }
 
-    if(productCount>PROD_MAX_COUNT ){
+    if(getRealProductCount()>PROD_MAX_COUNT ){
         flag = false;
         errli.append("<li class='15'>最多添加"+PROD_MAX_COUNT+"个货单记录；</li>");
     }
@@ -348,6 +349,35 @@ function checkProdSave(){
         flag = false;
         errli.append("<li class='16'>单价不能为字符；</li>");
     }
+
+    var weightmemo = $("#weightmemo").val();
+    var weightmemoCount = 0;
+    if(weightmemo != ""){
+        var wgArrays = weightmemo.split(".");
+        for(var pointIndex=0;pointIndex< wgArrays.length; pointIndex++){
+            var wgArrays2 = wgArrays[pointIndex].split(",");
+
+            for(var commaIndex=0;commaIndex<wgArrays2.length; commaIndex++){
+                if(isNaN(wgArrays2[commaIndex])){
+                    flag = false;
+                    errli.append("<li class='17'>重量备注有误[分隔符只能为(,或.)其余为数字]请检查；</li>");
+                    break;
+                }
+                weightmemoCount = weightmemoCount+ parseInt(wgArrays2[commaIndex]);
+            }
+
+            if(!flag){
+                break;
+            }
+        }
+        if(flag){
+            if(weightmemoCount != amount){
+                flag = false;
+                errli.append("<li class='18'>重量备注计算结果"+weightmemoCount+"与数量"+amount+"不一致，请检查；</li>");
+            }
+        }
+    }
+
     if(!flag){
         errorInfo.show();
     }
@@ -355,9 +385,9 @@ function checkProdSave(){
 }
 
 function checkProdAddParams(){
-    var errorInfo = $("#errorInfo");
+    var errorInfo = $("#errorInfo2");
     errorInfo.hide();
-    var errli = $("#errInfoList");
+    var errli = $("#errInfoList2");
     errli.empty();
     var flag =true;
 
@@ -413,7 +443,7 @@ function countMoney(){
         var specNum1 = specArrays[0];
         var specNum2 = specArrays[1];
         var specCount = specNum1 * specNum2 ;
-        specCount = specCount/10000;
+        specCount = specCount/(1000*1000);
         unitPrice = unitPrice/1000;
         money = gweight * specCount * amount * unitPrice;
     }else if(specType == SPEC_TYPE_WIDE){//宽幅
@@ -426,11 +456,12 @@ function countMoney(){
 }
 
 var productCount = 0;           //合计产品总数
+var productCountOffset = 0 ;    //每次修改后+1，(productCount-productCountOffset)求得真实添加的产品数量
 var moneyCount = parseFloat(0.00) ;  //合计金额总数
 var prodParamList = [];         //添加产品列表
 var DELIVER_TYPE_SELF = 4;      //送货方式自定义常量
 function addProduct(){
-    if(productCount == PROD_MAX_COUNT){
+    if(getRealProductCount() == PROD_MAX_COUNT){
         alert("一个货单最多添加"+PROD_MAX_COUNT+"个产品!");
         return;
     }
@@ -438,9 +469,14 @@ function addProduct(){
     addProductDiv.attr("class","ui basic segment show");
 }
 
+//获取真实的产品数量
+function getRealProductCount(){
+    return productCount-productCountOffset;
+}
+
 function resetProductAdd(){
-    $("#productId option:first").prop("selected","selected");
-    selectProdName($("#productId").val());
+   // $("#productId option:first").prop("selected","selected");
+   // selectProdName($("#productId").val());
    //克重和规格不重置
    // $("#gweight option:first").prop("selected","selected");
    // $("#specType option:first").prop("selected","selected");
@@ -449,7 +485,7 @@ function resetProductAdd(){
    // selectSpecType($("#specType").val());
     $("#moneyName").text("");
     $("#amount").val("");
-    $("#unitPrice").val("");
+  //  $("#unitPrice").val("");
     $("#memo").val("");
     $("#weightmemo").val("");
 }
@@ -548,6 +584,7 @@ function getUrlParamValue(requestParas,name) {
 
 //修改产品
 function updateProd(prodNum,spec,gweight){
+    productCountOffset++;   //修改后数量+
     var productPara = $("#productPara"+prodNum).val();
 
     var productId = getUrlParamValue(productPara,"productId");

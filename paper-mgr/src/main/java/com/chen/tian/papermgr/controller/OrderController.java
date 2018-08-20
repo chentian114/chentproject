@@ -1,6 +1,7 @@
 package com.chen.tian.papermgr.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.chen.tian.papermgr.constant.Consts;
 import com.chen.tian.papermgr.controller.base.BaseController;
 import com.chen.tian.papermgr.dto.OrderDto;
 import com.chen.tian.papermgr.dto.OrderQueryDto;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
@@ -102,6 +104,36 @@ public class OrderController extends BaseController {
         return JSON.toJSONString(returnDto);
     }
 
+    @RequestMapping(value="/orderDel.do" , method = RequestMethod.POST)
+    @ResponseBody
+    public String orderDel(HttpServletRequest request,@RequestParam(value="id", required = true) Long orderId){
+        ReturnDto returnDto = new ReturnDto(true);
+        try {
+            Object userId = request.getSession().getAttribute(Consts.SESSION_KEY_USERID);
+            boolean checkFlag = checkRole(userId);
+            if(!checkFlag){
+                logger.error("orderDel orderId:{} error!校验用户权限失败 userId:{}",orderId,userId);
+                returnDto.setStatus(false);
+                returnDto.setDescription("校验用户权限失败！");
+            }
+
+            orderService.delOrderById(orderId);
+        }catch (Exception e) {
+            logger.error("orderDel orderId:{} error!",orderId, e);
+            returnDto.setStatus(false);
+            returnDto.setDescription("系统繁忙，请稍后再试！");
+        }
+        return JSON.toJSONString(returnDto);
+    }
+
+    /**
+     * 校验客户是否有删除权限
+     * @param userId
+     * @return
+     */
+    private boolean checkRole(Object userId) {
+        return true;
+    }
 
     @RequestMapping(value="/downloadOrder.do")
     public HttpServletResponse downloadOrder(HttpServletResponse response,@RequestParam(value="id", required = true) Long orderId ){

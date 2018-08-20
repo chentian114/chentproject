@@ -254,7 +254,7 @@ public class OrderService {
      var specNum1 = specArrays[0];
      var specNum2 = specArrays[1];
      var specCount = specNum1 * specNum2 ;
-     specCount = specCount/10000;
+     specCount = specCount/(1000*1000);
      unitPrice = unitPrice/1000;
      money = gweight * specCount * amount * unitPrice;
      }else if(specType == SPEC_TYPE_WIDE){//宽幅
@@ -412,7 +412,13 @@ public class OrderService {
         }
     }
 
-
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    public void delOrderById(Long orderId){
+        if(orderId == null){
+            return ;
+        }
+        orderRepository.updateStateById(Consts.STATE_DELETED,new Date(),orderId);
+    }
     public TOrderEntity findOrderById(Long orderId) {
         if(orderId == null){
             return null;

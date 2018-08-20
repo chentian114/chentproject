@@ -2,7 +2,6 @@ $(function(){
 	$("input").keyup(function(e){
 		down( e );
 	});
-	setLastLoginAccount();
 	$('input[id=account]').focus();
 });
 function down( e ){

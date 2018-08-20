@@ -223,18 +223,14 @@ public class ExcelService {
 
 
     private String converSpecBySpecTypeAndSpec(String specType, String spec) {
-        //规格进十位显示
-        int scalBit = 10;
         String reg = "\\*";
         if(Consts.SPEC_TYPE_AREA.equals(specType)){
             String [] arrs = spec.split(reg);
             Float lenspec = Float.valueOf(arrs[0]);
             Float widspec = Float.valueOf(arrs[1]);
-            lenspec = lenspec * scalBit;
-            widspec = widspec * scalBit;
             return lenspec.intValue()+"*"+widspec.intValue();
         }else if(Consts.SPEC_TYPE_WIDE.equals(specType)){
-            Float fspec = Float.valueOf(spec) * scalBit;
+            Float fspec = Float.valueOf(spec);
             return String.valueOf(fspec.intValue());
         }else {
             return spec;

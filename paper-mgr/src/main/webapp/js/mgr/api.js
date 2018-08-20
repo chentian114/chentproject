@@ -22,6 +22,7 @@ OAUTH_PRODUCT_ATTRS="/product/productAttrs.do";				//产品属性配置
 
 //订单管理
 OAUTH_ORDER_ADD="/order/orderAdd.do";						//订单新增
+OAUTH_ORDER_DEL="/order/orderDel.do";						//订单删除
 OAUTH_ORDER_LIST="/order/orderList.do";						//订单列表
 OAUTH_ORDER_DETAIL="/order/orderDetail.do";		    		//订单详情
 OAUTH_ORDER_DOWNLOAD="/order/downloadOrder.do";				//订单下载

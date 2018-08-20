@@ -106,6 +106,7 @@
             <!--右侧内容 end-->
         </div>
     </div>
+    <input type="hidden" id="roleId" value="${sessionScope.loginUserInfo.roleId}"/>
 </div>
 <%@ include file="/common/footjs.jsp"%>
 <script src="<%=basePath%>/js/My97DatePicker/WdatePicker.js"></script>
@@ -115,8 +116,8 @@
 <!--脚部 end-->
 
 <!--删除 & 相关提示 start-->
-<!--删除新闻-->
-<div class="ui tiny modal delete" id="customer_delete" style="height: 200px;">
+<!--删除货单-->
+<div class="ui tiny modal delete" id="order_delete" style="height: 200px;">
     <div class="header">
         删除货单
     </div>
@@ -130,7 +131,7 @@
     </div>
     <div class="actions">
         <div class="ui cancel button">取消</div>
-        <input type="hidden" id="customerId"/>
+        <input type="hidden" id="orderId"/>
         <a href="#" id="confirm" onclick="deleteConfirm();"><div class="ui blue button confirm">确定</div></a>
     </div>
 </div>

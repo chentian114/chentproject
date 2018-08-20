@@ -52,7 +52,13 @@ function loadPage(page,size){
                     t+="<td>"+common.downTimeFormatDate(content[i].deliverDate)+"</td>";
                     t+="<td>"+content[i].moneyCount+"</td>";
 
-                    t+="<td><div class='button-link red delete'><a href='#' onclick='downOrder("+content[i].id+")'>下载货单</a></div></td>";
+
+                    t+="<td><div class='button-link red delete'><a href='#' onclick='downOrder("+content[i].id+")'>下载货单</a></div>" ;
+                    var roleId = $("#roleId").val();
+                    if( roleId == 1){
+                        t+= "<div class='button-link red delete'><a href='#' onclick='deteleOrder("+content[i].id+")'>删除</a></div>" ;
+                    }
+                    t+= "</td>" ;
                     t+="</tr>";
                 }
                 $html.append(t);
@@ -97,4 +103,34 @@ function downOrder(id){
     eleIF.src = url;
     eleIF.style.display = "none";
     document.body.appendChild(eleIF);
+}
+
+function deteleOrder(id){
+    $("#orderId").val("")
+    /*删除*/
+    //删除提示
+    $('#order_delete').modal('show');
+    $("#orderId").val(id)
+}
+
+
+function deleteConfirm(){
+    var id=$("#orderId").val();
+    $('#order_delete').modal('hide');
+    var param = {
+        "id": id
+    };
+
+    function cb(data, textStatus) {
+        if (data.status) {
+            $('#success').modal('show');
+            setTimeout(function() {
+                loadPage(page,size);
+            }, 1000);
+        } else {
+            $('#failure').modal('show');
+        }
+    }
+
+    api_request('../../' + OAUTH_ORDER_DEL, param, cb, null, true, null);
 }

@@ -56,8 +56,9 @@ html { overflow-x:hidden; }
 		                    <div class="item" id="loginInfo">${sessionScope.loginUserInfo.name}&nbsp;${sessionScope.loginUserInfo.account}</div>
 		                    <a class="item" title="退出" id="exit"><i class="power icon"></i>退出</a>
 		                    <input type="hidden" id="userId" value="${sessionScope.loginUserInfo.id}"/>
-		                    <input type="hidden" id="account" value="${sessionScope.loginUserInfo.account}"/>
-		                </div>
+							<input type="hidden" id="account" value="${sessionScope.loginUserInfo.account}"/>
+							<input type="hidden" id="roleId" value="${sessionScope.loginUserInfo.roleId}"/>
+						</div>
 		                <!--个人信息 end-->
 		            </div>
 		        </div>
