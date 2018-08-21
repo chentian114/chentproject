@@ -404,11 +404,11 @@ function checkProdAddParams(){
         errli.append("<li class='2'>送货地址不能为空；</li>");
     }
 
-    var deliveryCarNo = $("#deliveryCarNo").val();
+  /*  var deliveryCarNo = $("#deliveryCarNo").val();
     if(deliveryCarNo.length == 0 ){
         flag = false;
         errli.append("<li class='3'>送货车牌号不能为空；</li>");
-    }
+    }*/
 
     var deliveryPhone = $("#deliveryPhone").val();
     if(deliveryPhone.length == 0 ){

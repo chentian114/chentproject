@@ -112,7 +112,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="required fields">
+                        <div class=" fields">
                             <div class="two wide field">
                                 <label id="deliverTypeMsg">送货车牌号</label>
                             </div>
