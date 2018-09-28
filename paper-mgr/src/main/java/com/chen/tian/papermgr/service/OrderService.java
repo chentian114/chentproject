@@ -261,7 +261,7 @@ public class OrderService {
      amount = amount/1000;
      money = amount * unitPrice;
      }
-     money = common.formatFloatDigit(money,MONEY_DIGIT_2);
+     money = common.formatDoubleDigit(money,MONEY_DIGIT_2);
      * @param orderEntity
      * @return
      */
@@ -269,19 +269,48 @@ public class OrderService {
         if(Utils.isEmpty(orderEntity.getOrderProductList())){
             return false;
         }
-            int moneyCount = 0;
+        Double moneyCount = 0.0d;
         for(TOrderProdEntity prod : orderEntity.getOrderProductList()){
-            Float money = 0.0f ;
+            Double money = 0.0d ;
             if(Consts.SPEC_TYPE_AREA.equals(prod.getSpecType())){
-
+                Double gweight = Double.parseDouble(prod.getGweight());
+                gweight = gweight/1000;
+                String spec = prod.getSpec().trim();
+                String[] specArr = spec.split("\\*");
+                Double specNum1 = Double.parseDouble(specArr[0].trim());
+                Double specNum2 = Double.parseDouble(specArr[1].trim());
+                Double specCount = specNum1 * specNum2;
+                specCount = specCount/1000000;
+                Double amount = Double.parseDouble(prod.getAmount().trim());
+                Double unitPrice = Double.parseDouble(prod.getUnitPrice().trim());
+                unitPrice = unitPrice/1000;
+                money = gweight * specCount * amount * unitPrice ;
             }else if(Consts.SPEC_TYPE_WIDE.equals(prod.getSpecType())){
-
+                Double amount = Double.parseDouble(prod.getAmount().trim());
+                amount = amount/1000;
+                Double unitPrice = Double.parseDouble(prod.getUnitPrice().trim());
+                money = amount * unitPrice ;
             }
 
+            money = Math.round(money*100)/100.0;
+            moneyCount += money ;
+            System.out.println("prod.money:"+prod.getMoney()+" check money:"+money);
+            if(Double.doubleToLongBits(money) != Double.doubleToLongBits(prod.getMoney())){
+                System.out.println("[error]:money check error!======================="+"prod.money:"+prod.getMoney()+" check money:"+money);
+                return false;
+            }
+        }
+        moneyCount = Math.round(moneyCount*100)/100.0;
+        System.out.println("order prod.moneyCount:" + orderEntity.getMoneyCount() + " check moneyCount:" + moneyCount);
+        if(Double.doubleToLongBits(moneyCount) != Double.doubleToLongBits(orderEntity.getMoneyCount())){
+            System.out.println("[error]:moneyCount check error!======================"+"order prod.moneyCount:" + orderEntity.getMoneyCount() + " check moneyCount:" + moneyCount);
+            return false;
         }
 
         return true;
     }
+
+
 
     @Transactional
     public TOrderEntity saveOrder(TOrderEntity orderEntity) throws Exception {

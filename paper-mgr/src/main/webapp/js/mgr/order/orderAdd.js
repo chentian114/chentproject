@@ -351,6 +351,12 @@ function checkProdSave(){
     }
 
     var weightmemo = $("#weightmemo").val();
+    weightmemo = weightmemo.trim();
+    weightmemo = weightmemo.replace(/^,+|,+$/gm, "");  //去掉前后,
+    weightmemo = weightmemo.replace(/^\.+|\.+$/gm, "");  //去掉前后.
+    weightmemo = weightmemo.replace(/^,+|,+$/gm, "");  //去掉前后,  两遍为了处理清除所有
+    weightmemo = weightmemo.replace(/^\.+|\.+$/gm, "");  //去掉前后.
+
     var weightmemoCount = 0;
     if(weightmemo != ""){
         var wgArrays = weightmemo.split(".");
@@ -422,35 +428,36 @@ function checkProdAddParams(){
 }
 
 function countMoney(){
-    var specType = $("#specType").val();
-    var amount = $("#amount").val();
-    var unitPrice = $("#unitPrice").val();
-    var gweight = $("#gweight").val();
-    var spec = $("#spec").val();
+    var specType = $("#specType").val().trim();
+    var amount = $("#amount").val().trim();
+    var unitPrice = $("#unitPrice").val().trim();
+    var gweight = $("#gweight").val().trim();
+    var spec = $("#spec").val().trim();
 
     if(gweight == PRODUCT_ATTR_SELFDEFINE){
-        gweight = $("#gweightSelf").val();
+        gweight = $("#gweightSelf").val().trim();
     }
     if(spec == PRODUCT_ATTR_SELFDEFINE){
-        spec = $("#specSelf").val();
+        spec = $("#specSelf").val().trim();
     }
 
-    var money = 0;
+    var money = parseFloat(0.0);
     if(specType == SPEC_TYPE_AREA){ //长*宽
-        gweight = common.formatFloatDigit(gweight,MONEY_DIGIT_2);
+        gweight = parseFloat(gweight);
         gweight = gweight/1000;
+        spec = spec.trim();
         var specArrays = spec.split("*");
-        var specNum1 = specArrays[0];
-        var specNum2 = specArrays[1];
+        var specNum1 = parseFloat(specArrays[0].trim());
+        var specNum2 = parseFloat(specArrays[1].trim());
         var specCount = specNum1 * specNum2 ;
-        specCount = specCount/(1000*1000);
+        specCount = specCount/1000000;
         unitPrice = unitPrice/1000;
         money = gweight * specCount * amount * unitPrice;
     }else if(specType == SPEC_TYPE_WIDE){//宽幅
         amount = amount/1000;
         money = amount * unitPrice;
     }
-    money = common.formatFloatDigit(money,MONEY_DIGIT_2);
+    var money = common.formatFloatDigit_2(money);
     $("#money").val(money);
     $("#moneyName").text(money);
 }
@@ -636,27 +643,27 @@ function productCancel(){
 }
 
 function countOrderMoney(money) {
-    moneyCount = common.formatFloatDigit(moneyCount, MONEY_DIGIT_2) + common.formatFloatDigit(money, MONEY_DIGIT_2);
-    var moneyCountInt = Math.round(moneyCount); //总金额四舍五入整数
-    if(isNaN(moneyCountInt)){
-        moneyCountInt = 0
+    moneyCount = moneyCount + parseFloat(money);
+    var moneyCountDigit =  common.formatFloatDigit_2(moneyCount);
+    if(parseFloat(moneyCountDigit) == "NaN"){
+        moneyCount = 0;
     }
-    var moneyUpper = common.convertCurrency(moneyCountInt);
-    $("#moneyCount").val(moneyCountInt);
-    $("#moneyCountName").text(moneyCountInt);
+    var moneyUpper = common.convertCurrency(moneyCountDigit);
+    $("#moneyCount").val(moneyCountDigit);
+    $("#moneyCountName").text(moneyCountDigit);
     $("#moneyCountUpper").val(moneyUpper);
     $("#moneyCountUpperName").text(moneyUpper);
 }
 
 function countSubOrderMoney(money) {
-    moneyCount = common.formatFloatDigit(moneyCount, MONEY_DIGIT_2) - common.formatFloatDigit(money, MONEY_DIGIT_2);
-    var moneyCountInt = Math.round(moneyCount); //总金额四舍五入整数
-    if(isNaN(moneyCountInt)){
-        moneyCountInt = 0
+    moneyCount = moneyCount - parseFloat(money);
+    var moneyCountDigit =  common.formatFloatDigit_2(moneyCount);
+    if(parseFloat(moneyCountDigit) == "NaN"){
+        moneyCount = 0;
     }
-    var moneyUpper = common.convertCurrency(moneyCountInt);
-    $("#moneyCount").val(moneyCountInt);
-    $("#moneyCountName").text(moneyCountInt);
+    var moneyUpper = common.convertCurrency(moneyCountDigit);
+    $("#moneyCount").val(moneyCountDigit);
+    $("#moneyCountName").text(moneyCountDigit);
     $("#moneyCountUpper").val(moneyUpper);
     $("#moneyCountUpperName").text(moneyUpper);
 }

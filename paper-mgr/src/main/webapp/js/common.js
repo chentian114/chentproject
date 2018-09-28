@@ -179,9 +179,8 @@ var common = {
 		}
 
 	},
-	formatFloatDigit: function(num,digit){
-		var tmp = Math.pow(10,digit);
-		return parseInt(num*tmp,10)/tmp;
+	formatFloatDigit_2: function(num,digit){
+		return Math.round(num*100)/100;  //四舍五入
 	},
 	convertCurrency: function(money) {
 		var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');  //汉字的数字

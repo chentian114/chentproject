@@ -116,7 +116,7 @@ html { overflow-x:hidden; }
 			if (document.documentElement && document.documentElement.clientHeight)
 				winHeight = document.documentElement.clientHeight;
 			//DIV高度为浏览器窗口的高度
-			document.getElementById("managerBody").style.height= common.formatFloatDigit(winHeight*0.8,1) +"px";
+			document.getElementById("managerBody").style.height= common.formatFloatDigit_2(winHeight*0.8,1) +"px";
 
 		}
 		window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度

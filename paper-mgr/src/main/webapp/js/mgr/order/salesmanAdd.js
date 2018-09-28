@@ -92,18 +92,6 @@ function validParameters(salesName,address,phone) {
         return false;
     }
 
-    if(phone.length == 0 ){
-        displayNoneError();
-        $errorInfo.find("li.5").css("display", "block");
-        $errorInfo.show();
-        return false;
-    }
-    if (phone.length > 11) {
-        displayNoneError();
-        $errorInfo.find("li.6").css("display", "block");
-        $errorInfo.show();
-        return false;
-    }
     return true;
 }
 

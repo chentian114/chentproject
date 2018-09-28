@@ -141,12 +141,6 @@ function validParameters(custName,address,phone) {
         $errorInfo.show();
         return false;
     }
-    if (phone.length > 11) {
-        displayNoneError();
-        $errorInfo.find("li.6").css("display", "block");
-        $errorInfo.show();
-        return false;
-    }
     return true;
 }
 

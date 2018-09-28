@@ -144,7 +144,7 @@ public class OrderController extends BaseController {
 
             String filePath = excelService.buildToFilePath(orderEntity);
 
-            String filename = "送货单"+orderEntity.getOrderNumber()+excelService.getExcelTemplateFileSuffix();
+            String filename = orderEntity.getCustomerEntity().getCustName()+"送货单"+orderEntity.getOrderNumber()+excelService.getExcelTemplateFileSuffix();
 
             File file = new File(filePath);
 
