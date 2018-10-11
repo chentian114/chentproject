@@ -148,7 +148,7 @@ public class ExcelService {
 
         HSSFRow moneyRow = hSheet.getRow(OrderInfoEnum.MONEY_COUNT_2003.getRowNum());
         HSSFCell moneyCell = moneyRow.getCell(OrderInfoEnum.MONEY_COUNT_2003.getCellNum());
-        moneyCell.setCellValue(String.valueOf(orderEntity.getMoneyCount().intValue()));
+        moneyCell.setCellValue(String.valueOf(orderEntity.getMoneyCount()));
 
         HSSFRow paymentRow = hSheet.getRow(OrderInfoEnum.PAYMENT_TYPE_2003.getRowNum());
         HSSFCell paymentCell = paymentRow.getCell(OrderInfoEnum.PAYMENT_TYPE_2003.getCellNum());
@@ -300,7 +300,7 @@ public class ExcelService {
 
         XSSFRow moneyRow = xSheet.getRow(OrderInfoEnum.MONEY_COUNT.getRowNum());
         XSSFCell moneyCell = moneyRow.getCell(OrderInfoEnum.MONEY_COUNT.getCellNum());
-        moneyCell.setCellValue(String.valueOf(orderEntity.getMoneyCount().intValue()));
+        moneyCell.setCellValue(String.valueOf(orderEntity.getMoneyCount()));
 
         XSSFRow paymentRow = xSheet.getRow(OrderInfoEnum.PAYMENT_TYPE.getRowNum());
         XSSFCell paymentCell = paymentRow.getCell(OrderInfoEnum.PAYMENT_TYPE.getCellNum());
