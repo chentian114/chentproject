@@ -89,14 +89,18 @@
                             <div class="two wide field">
                                 <label>付款方式</label>
                             </div>
-                            <div class="ten wide field">
-                                <select id="paymentType" style="border: 1px solid #d6d8dd;width: 110px;height: 34px;border-radius: 4px;">
+                            <div class="three wide field">
+                                <select id="paymentType" onchange="selectPaymentType(this.options[this.options.selectedIndex].value)"  style="border: 1px solid #d6d8dd;width: 110px;height: 34px;border-radius: 4px;">
                                     <option value="1">货到付款</option>
                                     <option value="2">款到发货</option>
                                     <option value="3">预付定金尾款货到结清</option>
                                     <option value="4">当月结清</option>
                                     <option value="5">月结30天</option>
+                                    <option value="-1">自定义</option>
                                 </select>
+                            </div>
+                            <div class="two wide field hidden" id="paymentTypeSelfDiv">
+                                <input name="paymentTypeSelf" id="paymentTypeSelf" type="text" value="" placeholder="付款方式">
                             </div>
                         </div>
                         <div class="required fields">

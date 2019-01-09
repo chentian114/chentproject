@@ -47,9 +47,12 @@ function loadPage(page,size){
                         t+="<td>其他</td>";
                     }
                     t+="<td>"+content[i].salesmanEntity.salesName+"</td>";
-                    t+="<td><div class='button-link red delete'><a href='#' onclick='updateCustomer("+content[i].id+")'>修改</a></div>&nbsp;&nbsp;&nbsp;&nbsp;" +
-                        "<div class='button-link red delete'><a href='#' onclick='deteleCustomer("+content[i].id+")'>删除</a></div>" +
-                        "<div class='button-link red delete'><a href='#' onclick='addOrder("+content[i].id+")'>录入货单</a></div></td>";
+                    t+="<td><div class='button-link red delete'><a href='#' onclick='updateCustomer("+content[i].id+")'>修改</a></div>&nbsp;&nbsp;&nbsp;&nbsp;" ;
+                    var roleId = $("#roleId").val();
+                    if( roleId == 1) {
+                        t+="<div class='button-link red delete'><a href='#' onclick='deteleCustomer(" + content[i].id + ")'>删除</a></div>";
+                    }
+                    t+="<div class='button-link red delete'><a href='#' onclick='addOrder("+content[i].id+")'>录入货单</a></div></td>";
 
                     t+="</tr>";
                 }

@@ -104,6 +104,7 @@
             <!--右侧内容 end-->
         </div>
     </div>
+    <input type="hidden" id="roleId" value="${sessionScope.loginUserInfo.roleId}"/>
 </div>
 <%@ include file="/common/footjs.jsp"%>
 <script src="<%=basePath%>/js/My97DatePicker/WdatePicker.js"></script>

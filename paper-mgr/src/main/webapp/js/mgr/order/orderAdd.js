@@ -80,6 +80,14 @@ function loadDefaultOrderInfo(){
     $("#createDateEnd").val(common.downTimeFormatDate(new Date()));
 }
 
+function selectPaymentType(paymentType){
+    if(paymentType== -1){
+        $("#paymentTypeSelfDiv").attr("class","three wide field show");
+    }else{
+        $("#paymentTypeSelfDiv").attr("class","hidden");
+    }
+}
+
 function selectDeliverType(deliverType){
     if(deliverType == 1){
         $("#deliveryCarNo").val("A5QB65");
@@ -709,6 +717,9 @@ function orderAdd(){
     var deliveryAddress = $("#address").val();
     var deliverDate = $("#createDateEnd").val();
     var paymentType = $("#paymentType").find("option:selected").text();
+    if(paymentType == "自定义"){
+        paymentType = $("#paymentTypeSelf").val();
+    }
     var deliverType = $("#deliverType").find("option:selected").text();
     var deliveryCarNo = $("#deliveryCarNo").val();
     var deliveryPhone = $("#deliveryPhone").val();
