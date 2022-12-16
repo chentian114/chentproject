@@ -75,7 +75,7 @@
 	
 	<properties>
 		<hibernate.version>5.0.3.Final</hibernate.version>
-		<spring.version>4.3.18.RELEASE</spring.version>
+		<spring.version>5.2.20.RELEASE</spring.version>
 		<poi.version>3.16</poi.version>
 
 	</properties>
